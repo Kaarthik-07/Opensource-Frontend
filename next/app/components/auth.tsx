@@ -23,41 +23,43 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 
-const components = [
+// Updated list of Open Source Hub features
+const features: { title: string; href: string; description: string }[] = [
   {
-    title: "Alert Dialog",
-    href: "/docs/primitives/alert-dialog",
+    title: "Project Showcase",
+    href: "/docs/features/project-showcase",
     description:
-      "A modal dialog that interrupts the user with important content and expects a response.",
+      "Display and promote open-source projects to a community of contributors.",
   },
   {
-    title: "Hover Card",
-    href: "/docs/primitives/hover-card",
+    title: "Issue Management",
+    href: "/docs/features/issue-management",
     description:
-      "For sighted users to preview content available behind a link.",
+      "Efficiently track, assign, and resolve issues with collaboration tools.",
   },
   {
-    title: "Progress",
-    href: "/docs/primitives/progress",
+    title: "Real-time Chat",
+    href: "/docs/features/chat",
     description:
-      "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+      "Engage in real-time conversations with project contributors and users.",
   },
   {
-    title: "Scroll-area",
-    href: "/docs/primitives/scroll-area",
-    description: "Visually or semantically separates content.",
+    title: "Donation Support",
+    href: "/docs/features/donations",
+    description:
+      "Enable supporters to contribute to projects financially through donations.",
   },
   {
-    title: "Tabs",
-    href: "/docs/primitives/tabs",
+    title: "Personalized Recommendations",
+    href: "/docs/features/recommendations",
     description:
-      "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+      "Get tailored project and contributor recommendations based on your interests.",
   },
   {
-    title: "Tooltip",
-    href: "/docs/primitives/tooltip",
+    title: "Community Metrics",
+    href: "/docs/features/community-metrics",
     description:
-      "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+      "Track engagement metrics to measure project impact and community growth.",
   },
 ];
 
@@ -65,12 +67,18 @@ export function NavigationMenuDemo() {
   const { data: session } = useSession();
 
   return (
-    <div className="flex items-center justify-between w-full px-4 py-2 ">
-      <Image src="/pfp.png" width={50} height={50} alt="pfp" />
+    <div className="flex items-center justify-between w-full px-4 py-2">
+      <Image
+        src="/team.png"
+        width={170}
+        height={170}
+        alt="pfp"
+        className="object-cover p-2"
+      />
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
+            <NavigationMenuTrigger>Getting Started</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                 <li className="row-span-3">
@@ -80,53 +88,58 @@ export function NavigationMenuDemo() {
                       href="/"
                     >
                       <Image
-                        src="/pfp.png"
-                        className="h-6 w-6"
+                        src="/team.png"
+                        className="h-8 w-8"
                         width={50}
                         height={50}
-                        alt="pfp"
+                        alt="Open Source Hub logo"
                       />
                       <div className="mb-2 mt-4 text-lg font-medium">
-                        shadcn/ui
+                        Open Source Hub
                       </div>
                       <p className="text-sm leading-tight text-muted-foreground">
-                        Beautifully designed components that you can copy and
-                        paste into your apps. Accessible. Customizable. Open
-                        Source.
+                        A community-driven platform connecting open-source
+                        enthusiasts with tools for collaboration, project
+                        management, and contribution tracking.
                       </p>
                     </Link>
                   </NavigationMenuLink>
                 </li>
                 <ListItem href="/docs" title="Introduction">
-                  Re-usable components built using Radix UI and Tailwind CSS.
+                  Discover what Open Source Hub offers and how it can enhance
+                  open-source collaboration.
                 </ListItem>
-                <ListItem href="/docs/installation" title="Installation">
-                  How to install dependencies and structure your app.
+                <ListItem href="/docs/installation" title="Getting Set Up">
+                  Learn how to set up your environment and start contributing.
                 </ListItem>
-                <ListItem href="/docs/primitives/typography" title="Typography">
-                  Styles for headings, paragraphs, lists...etc
+                <ListItem href="/docs/features" title="Key Features">
+                  Explore the main features of the Open Source Hub platform.
                 </ListItem>
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
+
+          {/* "Features" section with updated content */}
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Components</NavigationMenuTrigger>
+            <NavigationMenuTrigger>Features</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                {components.map((component) => (
+                {features.map((feature) => (
                   <ListItem
-                    key={component.title}
-                    title={component.title}
-                    href={component.href}
+                    key={feature.title}
+                    title={feature.title}
+                    href={feature.href}
                   >
-                    {component.description}
+                    {feature.description}
                   </ListItem>
                 ))}
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
+
+          {/* Additional Links */}
           <NavigationMenuItem>
-            <Link href="/docs" legacyBehavior passHref>
+            <Link href="/tutorial" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 Documentation
               </NavigationMenuLink>
@@ -135,6 +148,7 @@ export function NavigationMenuDemo() {
         </NavigationMenuList>
       </NavigationMenu>
 
+      {/* Conditional Avatar/User Menu */}
       {session?.user?.email ? (
         <UserMenu />
       ) : (
@@ -144,6 +158,7 @@ export function NavigationMenuDemo() {
   );
 }
 
+// User Menu Component
 const UserMenu = () => {
   return (
     <DropdownMenu>
@@ -176,36 +191,28 @@ const UserMenu = () => {
   );
 };
 
-interface ListItemProps {
-  title: string;
-  children: React.ReactNode;
-  href: string;
-  className?: string;
-}
-
-const ListItem = React.forwardRef<HTMLAnchorElement, ListItemProps>(
-  (props, ref) => {
-    const { title, children, href, className } = props;
-
-    return (
-      <li>
-        <NavigationMenuLink asChild>
-          <Link
-            ref={ref}
-            href={href}
-            className={cn(
-              "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-              className
-            )}
-          >
-            <div className="text-sm font-medium leading-none">{title}</div>
-            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-              {children}
-            </p>
-          </Link>
-        </NavigationMenuLink>
-      </li>
-    );
-  }
-);
+const ListItem = React.forwardRef<
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  );
+});
 ListItem.displayName = "ListItem";
